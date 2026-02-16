@@ -1,0 +1,10 @@
+<svg width="800" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="200" fill="#0d1117" />
+  <rect x="2" y="2" width="796" height="196" fill="none" stroke="#30363d" stroke-width="1" />
+  
+  <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="Orbitron, sans-serif" font-size="64" font-weight="bold" fill="white" letter-spacing="8">EPHEMERAL</text>
+  
+  <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" fill="#8b949e" letter-spacing="2">Transient Data. Permanent Privacy.</text>
+  
+  <path d="M100 150 L700 150" stroke="#30363d" stroke-width="1" opacity="0.5" />
+</svg>

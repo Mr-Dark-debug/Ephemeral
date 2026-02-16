@@ -1,14 +1,21 @@
+[![Banner](banner.svg)](https://github.com/Mr-Dark-debug/Ephemeral)
+
+![Socialify](https://socialify.git.ci/Mr-Dark-debug/Ephemeral/image?description=1&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pattern=Charlie+Brown&pulls=1&stargazers=1&theme=Light)
+
 # Ephemeral (Meshroom)
 
-Ephemeral is a terminal-first, zero-account, no-server, no-history LAN chat system written entirely in Go.
+Ephemeral is a production-ready, terminal-first, zero-account, local-first LAN chat system written entirely in Go. Designed for privacy and instant communication without servers, history, or tracking.
 
-## Features
+## 🚀 Vision
+Ephemeral enables users on the same Wi-Fi network to chat instantly using a single static binary. It prioritizes zero-persistence and robust peer discovery.
 
-- **Local-first**: Works on LAN without internet.
-- **Zero-config**: Auto-discovery via mDNS (zeroconf).
-- **Secure**: Optional AES-256-GCM encryption with HKDF key derivation.
-- **Private**: No chat history stored on disk. No telemetry.
-- **Cross-platform**: Linux, macOS, Windows, Android (Termux).
+## ✨ Features
+- **Local-first**: Operates entirely within your local network (LAN). No internet required.
+- **Auto-Discovery**: mDNS (zeroconf) with a reliable UDP broadcast fallback.
+- **Secure by Design**: Optional room-level encryption using AES-256-GCM and HKDF-SHA256.
+- **Ephemeral Storage**: All chat state and keys are kept in-memory. Nothing is written to disk.
+- **Modern TUI**: Built with Charm's Bubble Tea and Lip Gloss.
+- **Cross-Platform**: Linux, macOS, Windows, and Android (Termux).
 
 ## 📥 Installation
 
@@ -17,64 +24,55 @@ For the fastest setup, use our automated installer:
 
 **Linux / macOS / Termux:**
 ```bash
-curl -sSL https://raw.githubusercontent.com/yourusername/ephemeral/main/scripts/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Mr-Dark-debug/Ephemeral/main/scripts/install.sh | bash
 ```
 
 **Windows (PowerShell):**
 ```powershell
-powershell -ExecutionPolicy ByPass -Command "iwr -useb https://raw.githubusercontent.com/yourusername/ephemeral/main/scripts/install.ps1 | iex"
+powershell -ExecutionPolicy ByPass -Command "iwr -useb https://raw.githubusercontent.com/Mr-Dark-debug/Ephemeral/main/scripts/install.ps1 | iex"
 ```
 
 ### Manual Installation (Go)
 Requires Go 1.23+. This will install the `ephemeral` binary to your `$GOPATH/bin`.
 ```bash
-go install github.com/yourusername/ephemeral/cmd/ephemeral@latest
+go install github.com/Mr-Dark-debug/Ephemeral/cmd/ephemeral@latest
 ```
 
 ### Termux (Android) Note
-If you are running Go commands in `/storage/emulated/0`, you will encounter `RLock: function not implemented` due to filesystem limitations. **Move the project to your Termux home directory (`~/`) to resolve this.**
+If you are running Go commands in `/storage/emulated/0`, you will encounter `RLock: function not implemented`. **Move the project to your Termux home directory (`~/`) to build from source.**
 
-## Usage
-
-Start the chat:
-
+## 🛠 Usage
+Launch the application:
 ```bash
-ephemeral --nick Alice
+ephemeral --nick alice
 ```
 
-Commands inside TUI:
-- `/join <room> [password]`: Join a room (optionally encrypted).
-- `/nick <name>`: Change nickname.
+### Keyboard Shortcuts
+- `Ctrl+C`: Quit
+- `Enter`: Send message / Execute command
+- `Ctrl+L`: Clear screen
+
+### Commands
+- `/join <room> [password]`: Join a room (encrypted if password provided).
+- `/nick <newname>`: Change display name.
 - `/quit`: Exit.
 
-## Architecture
+## 🏗 Architecture
+- **Discovery**: mDNS (`github.com/grandcat/zeroconf`) + UDP Fallback.
+- **Transport**: Persistent TCP with JSON-Lines framing.
+- **Encryption**: AES-256-GCM, HKDF-SHA256.
+- **UI Framework**: Bubble Tea.
 
-- **Discovery**: mDNS (grandcat/zeroconf).
-- **Transport**: TCP JSON-lines with backpressure.
-- **UI**: Bubble Tea + Lip Gloss.
-- **Crypto**: AES-256-GCM, HKDF-SHA256.
-
-## Development
-
-Run tests:
-
+## 🧪 Development
 ```bash
-go test ./...
-```
-
-Build:
-
-```bash
+go test -v ./...
 ./scripts/build.sh
 ```
 
-## Security
+## 🛡 Security & Privacy
+- **No Persistence**: History is lost on exit.
+- **No Telemetry**: Ephemeral does not phone home.
+- **Replay Protection**: Unique message UUIDs and in-memory caches.
 
-- Keys are derived from passphrases using HKDF.
-- Messages are encrypted with AES-256-GCM.
-- Replay protection is implemented via unique message IDs (in-memory).
-- No data is persisted to disk.
-
-## License
-
-MIT
+## 📄 License
+MIT License.

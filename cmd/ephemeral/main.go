@@ -15,10 +15,18 @@ import (
 	"github.com/google/uuid"
 )
 
+const version = "1.0.0"
+
 func main() {
 	nick := flag.String("nick", "guest", "Your nickname")
 	port := flag.Int("port", 9999, "Port to listen on (0 for random)")
+	v := flag.Bool("version", false, "Show version information")
 	flag.Parse()
+
+	if *v {
+		fmt.Printf("Ephemeral version %s\n", version)
+		os.Exit(0)
+	}
 
 	cfg := config.Default()
 	cfg.Nick = *nick

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ephemeral | Decentralized LAN Chat</title>
+    <link rel="stylesheet" href="website/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo terminal-font">EPHEMERAL</a>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+                <ul class="nav-links">
+                    <li><a href="website/pages/docs.html">Docs</a></li>
+                    <li><a href="website/pages/install.html">Install</a></li>
+                    <li><a href="website/pages/chat.html">Community</a></li>
+                    <li><a href="website/pages/help.html">Help</a></li>
+                    <li><a href="https://github.com/Mr-Dark-debug/Ephemeral" class="btn" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero section">
+            <div class="container" style="padding-top: 150px; text-align: center;">
+                <div class="terminal-window fade-in-up" style="max-width: 800px; margin: 0 auto;">
+                    <div class="terminal-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <span style="margin-left: auto; font-size: 0.8rem; color: #8b949e;">bash — ephemeral --v1.0.3</span>
+                    </div>
+                    <div class="terminal-body" style="text-align: left;">
+                        <span style="color: var(--accent-green);">$</span> <span class="typing-text" style="font-size: 3rem; font-weight: bold; color: white;"></span>
+                        <p style="margin-top: 1rem; font-size: 1.2rem; color: var(--sub-text-color);">
+                            Transient Data. Permanent Privacy.
+                        </p>
+                        <p style="color: #6e7681; margin-top: 0.5rem;">> Local-first, zero-account P2P LAN chat system.</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="website/pages/install.html" class="btn btn-primary">Start_Now</a>
+                            <a href="website/pages/docs.html" class="btn" style="margin-left: 1rem;">View_Docs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container fade-in-up" style="margin-top: 80px;">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Local-First</h3>
+                    <p>No internet required. Discovery works automatically on your LAN via mDNS and UDP broadcast.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-secret"></i>
+                    <h3>Zero History</h3>
+                    <p>Everything lives in RAM. No databases, no logs, no trackers. Data dies when you exit.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>Encrypted Rooms</h3>
+                    <p>Optional E2EE using AES-256-GCM and HKDF-SHA256. Privacy on demand.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-bar fade-in-up">
+            <div class="container" style="display: flex; width: 100%; justify-content: space-around; flex-wrap: wrap;">
+                <div class="stat-item">
+                    <span class="stat-value" id="star-count">...</span>
+                    <span class="stat-label">GitHub Stars</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="fork-count">...</span>
+                    <span class="stat-label">Forks</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="issue-count">...</span>
+                    <span class="stat-label">Open Issues</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="container fade-in-up contributors-section">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Top Contributors</h2>
+            <div class="contributors-row" id="contributors-row">
+                <!-- Loaded via JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer style="padding: 4rem 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--sub-text-color);">
+        <div class="container">
+            <p>&copy; 2026 Ephemeral Project. Built for Privacy.</p>
+            <div style="margin-top: 1rem;">
+                <a href="#" style="margin: 0 10px;">Twitter</a>
+                <a href="https://github.com/Mr-Dark-debug/Ephemeral" style="margin: 0 10px;">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="website/js/main.js"></script>
+</body>
+</html>

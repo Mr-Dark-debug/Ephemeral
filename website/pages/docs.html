@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs | Ephemeral</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../../index.html" class="logo terminal-font">EPHEMERAL</a>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+                <ul class="nav-links">
+                    <li><a href="docs.html" class="active">Docs</a></li>
+                    <li><a href="install.html">Install</a></li>
+                    <li><a href="chat.html">Community</a></li>
+                    <li><a href="help.html">Help</a></li>
+                    <li><a href="https://github.com/Mr-Dark-debug/Ephemeral" class="btn" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="docs-container">
+            <aside class="sidebar">
+                <h4 class="terminal-font" style="margin-bottom: 1rem; color: var(--accent-green);">/DOCUMENTATION</h4>
+                <ul>
+                    <li><a href="#intro" class="active">Introduction</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#protocol">Protocol</a></li>
+                    <li><a href="#encryption">Encryption</a></li>
+                    <li><a href="#commands">CLI Commands</a></li>
+                </ul>
+            </aside>
+
+            <section class="main-content fade-in-up">
+                <h1 id="intro">System Documentation</h1>
+                <p>Learn how Ephemeral works under the hood to provide secure, local communication.</p>
+
+                <h2 id="architecture" style="margin-top: 2rem;">1. Architecture</h2>
+                <p>Ephemeral is built on a decentralized mesh model. Peers communicate directly over TCP without any intermediary server.</p>
+                <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li><strong>Discovery:</strong> mDNS (Zeroconf) as primary, UDP Broadcast as fallback.</li>
+                    <li><strong>Transport:</strong> Reliable TCP streams with JSON-Lines framing.</li>
+                    <li><strong>Storage:</strong> None. In-memory message buffers only.</li>
+                </ul>
+
+                <h2 id="protocol" style="margin-top: 3rem;">2. Protocol Spec</h2>
+                <p>Messages are exchanged as JSON objects followed by a newline <code>
+</code>.</p>
+                <div class="code-block">
+                    <pre>{
+  "v": 1,
+  "id": "uuid-v4",
+  "from": "peer-id",
+  "nick": "alice",
+  "room": "global",
+  "ts": 1700000000,
+  "type": "chat",
+  "payload": "Hello network!"
+}</pre>
+                </div>
+
+                <h2 id="encryption" style="margin-top: 3rem;">3. Encryption</h2>
+                <p>Ephemeral uses **Authenticated Encryption with Associated Data (AEAD)**.</p>
+                <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li><strong>Algorithm:</strong> AES-256-GCM.</li>
+                    <li><strong>Key Derivation:</strong> HKDF-SHA256 from user passphrase + salt.</li>
+                    <li><strong>Replay Protection:</strong> ID-based cache with TTL.</li>
+                </ul>
+
+                <h2 id="commands" style="margin-top: 3rem;">4. CLI Commands</h2>
+                <div class="terminal-window">
+                    <div class="terminal-body">
+                        <p><span style="color: var(--accent-green);">/join &lt;room&gt; [pass]</span> - Join or create a room.</p>
+                        <p><span style="color: var(--accent-green);">/nick &lt;name&gt;</span> - Change your display name.</p>
+                        <p><span style="color: var(--accent-green);">/peers</span> - Show all online peers on LAN.</p>
+                        <p><span style="color: var(--accent-green);">/quit</span> - Exit the application.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

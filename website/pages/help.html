@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help | Ephemeral</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../../index.html" class="logo terminal-font">EPHEMERAL</a>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+                <ul class="nav-links">
+                    <li><a href="docs.html">Docs</a></li>
+                    <li><a href="install.html">Install</a></li>
+                    <li><a href="chat.html">Community</a></li>
+                    <li><a href="help.html" class="active">Help</a></li>
+                    <li><a href="https://github.com/Mr-Dark-debug/Ephemeral" class="btn" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 150px;">
+        <section class="fade-in-up" style="max-width: 800px; margin: 0 auto;">
+            <h1 class="terminal-font" style="margin-bottom: 2rem;">Support_&_FAQ</h1>
+            
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">Q: How do I find peers?</h3>
+                <p>Ensure both devices are on the same Wi-Fi network. Ephemeral uses mDNS and UDP broadcast. If you are on a restricted network (like a university or office), discovery might be blocked.</p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">Q: Is it really serverless?</h3>
+                <p>Yes. There is no central registry. Peers announce themselves to the local network and connect directly to each other.</p>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">Q: Can I use it over the internet?</h3>
+                <p>By default, no. Ephemeral is designed for LAN only. However, you can use it over a VPN or a tunnel like Tailscale/ZeroTier if both peers are on the same virtual network.</p>
+            </div>
+
+            <div style="margin-top: 4rem; padding: 2rem; border: 1px dashed var(--border-color); text-align: center;">
+                <h2 class="terminal-font">Still need help?</h2>
+                <p style="margin: 1rem 0; color: var(--sub-text-color);">Open an issue on GitHub or reach out to our community.</p>
+                <a href="https://github.com/Mr-Dark-debug/Ephemeral/issues" class="btn btn-primary">Open_GitHub_Issue</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

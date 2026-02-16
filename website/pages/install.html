@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install | Ephemeral</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../../index.html" class="logo terminal-font">EPHEMERAL</a>
+                <button class="hamburger"><i class="fas fa-bars"></i></button>
+                <ul class="nav-links">
+                    <li><a href="docs.html">Docs</a></li>
+                    <li><a href="install.html" class="active">Install</a></li>
+                    <li><a href="chat.html">Community</a></li>
+                    <li><a href="help.html">Help</a></li>
+                    <li><a href="https://github.com/Mr-Dark-debug/Ephemeral" class="btn" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="docs-container">
+            <aside class="sidebar">
+                <h4 class="terminal-font" style="margin-bottom: 1rem; color: var(--accent-green);">/SETUP</h4>
+                <ul>
+                    <li><a href="#one-liner" class="active">One-Line Install</a></li>
+                    <li><a href="#go-install">Go Install</a></li>
+                    <li><a href="#manual">Manual Build</a></li>
+                    <li><a href="#termux">Termux Guide</a></li>
+                </ul>
+            </aside>
+
+            <section class="main-content fade-in-up">
+                <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Installation Guide</h1>
+                <p style="color: var(--sub-text-color); margin-bottom: 2rem;">Get Ephemeral up and running on your system in seconds.</p>
+
+                <h2 id="one-liner" style="margin-top: 2rem;">One-Line Quick Install</h2>
+                <p>The recommended way to install production binaries.</p>
+                
+                <h4 style="margin-top: 1.5rem;">Linux / macOS / Termux</h4>
+                <div class="code-block">
+                    <pre id="code-bash">curl -sSL https://raw.githubusercontent.com/Mr-Dark-debug/Ephemeral/main/scripts/install.sh | bash</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, document.getElementById('code-bash').innerText)">COPY</button>
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">Windows (PowerShell)</h4>
+                <div class="code-block">
+                    <pre id="code-ps">powershell -ExecutionPolicy ByPass -Command "iwr -useb https://raw.githubusercontent.com/Mr-Dark-debug/Ephemeral/main/scripts/install.ps1 | iex"</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, document.getElementById('code-ps').innerText)">COPY</button>
+                </div>
+
+                <h2 id="go-install" style="margin-top: 3rem;">Manual Go Install</h2>
+                <p>If you have Go 1.23+ installed, you can build from source directly into your GOBIN.</p>
+                <div class="code-block">
+                    <pre id="code-go">go install github.com/Mr-Dark-debug/Ephemeral/cmd/ephemeral@latest</pre>
+                    <button class="copy-btn" onclick="copyToClipboard(this, document.getElementById('code-go').innerText)">COPY</button>
+                </div>
+
+                <h2 id="termux" style="margin-top: 3rem; color: var(--accent-green);">Termux (Android) Important Note</h2>
+                <div class="feature-card" style="border-color: var(--accent-purple);">
+                    <p>Due to Android filesystem limitations, running Go modules in <code>/storage/emulated/0</code> will result in errors. Always install and run Ephemeral from your Termux home directory:</p>
+                    <div class="code-block" style="margin-top: 1rem;">
+                        <pre>cd ~
+git clone https://github.com/Mr-Dark-debug/Ephemeral
+cd Ephemeral
+go run ./cmd/ephemeral</pre>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

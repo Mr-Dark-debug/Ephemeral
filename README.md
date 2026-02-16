@@ -29,6 +29,10 @@ Ephemeral (formerly Meshroom) is built for those who value transient communicati
 
 ---
 
+<img width="1919" height="1007" alt="image" src="https://github.com/user-attachments/assets/f42cd401-5af5-4996-b3de-aedfbd75d8d9" />
+
+---
+
 ## 📥 Installation
 
 ### 🚀 One-Line Quick Install (Recommended)

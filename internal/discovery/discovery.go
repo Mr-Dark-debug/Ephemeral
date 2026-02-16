@@ -231,6 +231,10 @@ func (s *Service) startUDPBroadcaster() {
 	}
 }
 
+func (s *Service) OnlineCount() int {
+	return len(s.peers) + 1
+}
+
 func (s *Service) handleFoundPeer(p Peer) {
 	if _, exists := s.peers[p.ID]; !exists {
 		s.peers[p.ID] = p

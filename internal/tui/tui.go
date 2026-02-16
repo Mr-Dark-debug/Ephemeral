@@ -7,6 +7,7 @@ import (
 	"ephemeral/internal/room"
 	"ephemeral/internal/transport"
 	"fmt"
+	"net"
 	"strings"
 	"time"
 
@@ -30,6 +31,10 @@ var (
 			Padding(0, 1).
 			Bold(true)
 
+	metadataStyle = lipgloss.NewStyle().
+			Foreground(subText).
+			Padding(0, 1)
+
 	statusStyle = lipgloss.NewStyle().
 			Foreground(accentGreen).
 			Padding(0, 1)
@@ -38,6 +43,31 @@ var (
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(accentPurple).
 			Padding(0, 1)
+
+	suggestionStyle = lipgloss.NewStyle().
+			Background(lipgloss.Color("#21262d")).
+			Foreground(lipgloss.Color("#ffffff")).
+			Padding(0, 1)
+
+	selectedSuggestionStyle = lipgloss.NewStyle().
+					Background(accentPurple).
+					Foreground(lipgloss.Color("#ffffff")).
+					Padding(0, 1)
+
+	suggestionBorderStyle = lipgloss.NewStyle().
+				Border(lipgloss.RoundedBorder()).
+				BorderForeground(accentPurple).
+				Background(lipgloss.Color("#21262d"))
+
+	keycapStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#ffffff")).
+			Background(lipgloss.Color("#30363d")).
+			Padding(0, 1).
+			MarginRight(1)
+
+	keycapDescStyle = lipgloss.NewStyle().
+			Foreground(subText).
+			MarginRight(2)
 
 	myMsgStyle = lipgloss.NewStyle().
 			Foreground(cyan).
@@ -55,6 +85,8 @@ var (
 			Padding(0, 1)
 )
 
+var availableCommands = []string{"/join", "/nick", "/clear", "/help", "/ip"}
+
 type model struct {
 	cfg       *config.Config
 	roomMgr   *room.Manager
@@ -63,6 +95,10 @@ type model struct {
 
 	viewport  viewport.Model
 	textInput textinput.Model
+
+	suggestionMenuOpen   bool
+	selectedCommandIndex int
+	filteredCommands     []string
 
 	width  int
 	height int
@@ -103,6 +139,33 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
+		if m.suggestionMenuOpen {
+			switch msg.Type {
+			case tea.KeyUp:
+				m.selectedCommandIndex--
+				if m.selectedCommandIndex < 0 {
+					m.selectedCommandIndex = len(m.filteredCommands) - 1
+				}
+				return m, nil
+			case tea.KeyDown:
+				m.selectedCommandIndex++
+				if m.selectedCommandIndex >= len(m.filteredCommands) {
+					m.selectedCommandIndex = 0
+				}
+				return m, nil
+			case tea.KeyTab, tea.KeyEnter:
+				if len(m.filteredCommands) > 0 {
+					m.textInput.SetValue(m.filteredCommands[m.selectedCommandIndex] + " ")
+					m.textInput.CursorEnd()
+					m.suggestionMenuOpen = false
+					return m, nil
+				}
+			case tea.KeyEsc:
+				m.suggestionMenuOpen = false
+				return m, nil
+			}
+		}
+
 		switch msg.Type {
 		case tea.KeyCtrlC, tea.KeyEsc:
 			return m, tea.Quit
@@ -117,10 +180,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 	case tea.WindowSizeMsg:
-		headerHeight := 3
-		footerHeight := 3
-		inputHeight := 3
-		verticalMargin := headerHeight + footerHeight + inputHeight
+		verticalMargin := 11
 
 		if !m.ready {
 			m.viewport = viewport.New(msg.Width, msg.Height-verticalMargin)
@@ -148,6 +208,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	m.textInput, tiCmd = m.textInput.Update(msg)
+
+	// Update suggestions
+	val := m.textInput.Value()
+	if strings.HasPrefix(val, "/") && !strings.Contains(val, " ") {
+		m.filteredCommands = nil
+		for _, cmd := range availableCommands {
+			if strings.HasPrefix(cmd, val) {
+				m.filteredCommands = append(m.filteredCommands, cmd)
+			}
+		}
+		m.suggestionMenuOpen = len(m.filteredCommands) > 0
+		if m.selectedCommandIndex >= len(m.filteredCommands) {
+			m.selectedCommandIndex = 0
+		}
+	} else {
+		m.suggestionMenuOpen = false
+	}
+
 	m.viewport, vpCmd = m.viewport.Update(msg)
 	cmds = append(cmds, tiCmd, vpCmd)
 
@@ -159,16 +237,70 @@ func (m model) View() string {
 		return "\n  Initializing TUI..."
 	}
 
-	header := headerStyle.Render(" EPHEMERAL ") + statusStyle.Render("🟢 Connected")
-	footer := helpStyle.Render("ESC: Quit • CTRL+L: Clear • /join: Room • /nick: Name")
+	header := m.renderHeader()
+	suggestions := m.renderSuggestions()
+	footer := m.renderFooter()
+
+	inputView := inputStyle.Width(m.width - 2).Render(m.textInput.View())
+
+	// Position suggestions above input
+	var mainContent string
+	if m.suggestionMenuOpen {
+		// We might need to adjust viewport height if suggestions overlap too much,
+		// but for now let's just stack them.
+		mainContent = fmt.Sprintf("%s\n%s\n%s", m.viewport.View(), suggestions, inputView)
+	} else {
+		mainContent = fmt.Sprintf("%s\n\n%s", m.viewport.View(), inputView)
+	}
 
 	return fmt.Sprintf(
-		"%s\n\n%s\n\n%s\n%s",
+		"%s\n\n%s\n\n%s",
 		header,
-		m.viewport.View(),
-		inputStyle.Width(m.width-2).Render(m.textInput.View()),
+		mainContent,
 		footer,
 	)
+}
+
+func (m model) renderHeader() string {
+	left := headerStyle.Render(" EPHEMERAL ")
+
+	if m.width < 60 {
+		right := statusStyle.Render("🟢 Connected")
+		w := m.width - lipgloss.Width(left)
+		if w < 0 {
+			return left
+		}
+		return lipgloss.JoinHorizontal(lipgloss.Center, left, lipgloss.PlaceHorizontal(w, lipgloss.Right, right))
+	}
+
+	right := metadataStyle.Render(fmt.Sprintf("v1.0.0 | 👥 %d Online | 🔌 Connected", m.discovery.OnlineCount()))
+	w := m.width - lipgloss.Width(left)
+	return lipgloss.JoinHorizontal(lipgloss.Center, left, lipgloss.PlaceHorizontal(w, lipgloss.Right, right))
+}
+
+func (m model) renderSuggestions() string {
+	if !m.suggestionMenuOpen || len(m.filteredCommands) == 0 {
+		return ""
+	}
+
+	var items []string
+	for i, cmd := range m.filteredCommands {
+		if i == m.selectedCommandIndex {
+			items = append(items, selectedSuggestionStyle.Render(" > "+cmd+" "))
+		} else {
+			items = append(items, suggestionStyle.Render("   "+cmd+" "))
+		}
+	}
+
+	return suggestionBorderStyle.Render(lipgloss.JoinVertical(lipgloss.Left, items...))
+}
+
+func (m model) renderFooter() string {
+	esc := keycapStyle.Render("ESC") + keycapDescStyle.Render("Quit")
+	ctrlL := keycapStyle.Render("CTRL+L") + keycapDescStyle.Render("Clear")
+	tab := keycapStyle.Render("TAB") + keycapDescStyle.Render("Autocomplete")
+
+	return lipgloss.JoinHorizontal(lipgloss.Top, esc, ctrlL, tab)
 }
 
 func (m *model) sendMessage(text string) {
@@ -184,6 +316,27 @@ func (m *model) sendMessage(text string) {
 			if len(parts) > 1 {
 				m.roomMgr.Nick = parts[1]
 			}
+		case "/clear":
+			m.roomMgr.Current().Messages = nil
+			m.viewport.SetContent(m.renderMessages())
+		case "/help":
+			m.roomMgr.AddMessage(protocol.NewEnvelope("sys", "system", "System", m.roomMgr.CurrentRoom, protocol.TypeChat, "Available commands: /join <room>, /nick <name>, /clear, /help, /ip"))
+			m.viewport.SetContent(m.renderMessages())
+			m.viewport.GotoBottom()
+		case "/ip":
+			addrs, _ := net.InterfaceAddrs()
+			var ip string
+			for _, a := range addrs {
+				if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+					if ipnet.IP.To4() != nil {
+						ip = ipnet.IP.String()
+						break
+					}
+				}
+			}
+			m.roomMgr.AddMessage(protocol.NewEnvelope("sys", "system", "System", m.roomMgr.CurrentRoom, protocol.TypeChat, fmt.Sprintf("Your Local IP: %s", ip)))
+			m.viewport.SetContent(m.renderMessages())
+			m.viewport.GotoBottom()
 		}
 		return
 	}
